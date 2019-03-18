@@ -1,0 +1,153 @@
+
+    
+<html>
+<head>
+    <title>Clarity Admin WDC</title>
+    
+    <meta http-equiv="Cache-Control" content="no-store" />
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://connectors.tableau.com/libs/tableauwdc-2.0.0-beta.js"></script>
+    <script>
+		(function () {
+		    var myConnector = tableau.makeConnector();
+			myConnector.init = function(initCallback) {
+			    initCallback();
+		        tableau.connectionName = "Clarity Admin JSON";
+			    tableau.submit();
+			};
+			myConnector.getSchema = function (schemaCallback) {
+                var cols = [{
+            id: "id",
+            dataType: tableau.dataTypeEnum.string
+        }, {
+            id: "createdUtc",
+            alias: "Created UTC",
+            dataType: tableau.dataTypeEnum.date
+        },{
+            id: "updatedUtc",
+            alias: "Updated UTC",
+            dataType: tableau.dataTypeEnum.date
+        },{
+            id: "datasetId",
+            alias: "Dataset Id",
+            dataType: tableau.dataTypeEnum.string
+        }, {
+            id: "fileId",
+            dataType: tableau.dataTypeEnum.float
+        },{
+            id: "filename",
+            alias: "File Name",
+            dataType: tableau.dataTypeEnum.string
+        },{
+            id: "size",
+            dataType: tableau.dataTypeEnum.int
+        },{
+            id: "user",
+            alias: "User",
+            dataType: tableau.dataTypeEnum.string
+        },{
+           id: "lastStateChangeHours",
+           alias: "Last State Change Hours",
+           dataType: tableau.dataTypeEnum.int 
+        },{
+            id: "source",
+            alias: "Source",
+            dataType: tableau.dataTypeEnum.string
+        },{
+            id: "state",
+            alias: "State",
+            dataType: tableau.dataTypeEnum.string
+        },{
+            id: "workflowType",
+            alias: "Workflow Type",
+            dataType: tableau.dataTypeEnum.string
+        }];
+    
+        var tableSchema = {
+            id: "clarityV2",
+            alias: "Processing Analytics",
+            columns: cols
+        };
+    
+        schemaCallback([tableSchema]);
+    };
+			myConnector.getData = function (table, doneCallback) {
+					    var card_tableData = [];
+					    $.getJSON("https://admin.stage.clarity.trimble.com/workflows?code=ad7886f7-c3f7-45de-b189-d898f595d0bc&pageSize=5", function (cards) {
+					        for (var i = 0, len = cards.length; i < len; i++) {
+								set = cards[i].set || 'Unknown',
+								card_type = cards[i].type || 'Unknown',
+								race = cards[i].race || 'Unknown',
+								faction = cards[i].faction || 'Unknown',
+								rarity = cards[i].rarity || 'Unknown',
+								collectible = cards[i].collectible || false,
+								card_name = cards[i].name || 'Unknown',
+								cost = cards[i].cost || 0,
+								health = cards[i].health || 0,
+								attack = cards[i].attack || 0,
+								durability = cards[i].durability || 0,
+								playerClass = cards[i].playerClass || 'Neutral',
+								card_id = cards[i].id || 'Unknown'
+					            card_tableData.push({
+									'Set': set,	
+									'Type': card_type, 
+									'Race': race, 
+									'Faction': faction, 
+									'Rarity': rarity, 
+									'Collectible': collectible, 
+									'Name': card_name, 
+									'Cost': cost, 
+									'Health': health, 
+									'Attack': attack, 
+									'Durability': durability, 
+									'playerClass': playerClass, 
+									'ID': card_id
+					            });
+							}
+					        table.appendRows(card_tableData);
+					        doneCallback();
+					    });
+
+				};
+		    tableau.registerConnector(myConnector);
+			$(document).ready(function () {
+			    $("#submitButton").click(function () {
+			        tableau.connectionName = "Hearthstone_JSON";
+			        tableau.submit();
+			    });
+			});
+		})();
+	</script>
+	<style>
+		body {
+		    background-image: url("ipad_wallpaper800x600.jpg");
+			background-repeat: no-repeat;
+			background-position: center top;
+		    background-color: #cccccc;
+		}
+		a {
+		    color: #265380;
+		}
+		.center {
+			color: #21140F;
+			text-align: center;
+			margin: auto;
+			margin-top: 50px;
+			width: 600px;
+			opacity: 0.5;
+		}
+	</style>
+</head>
+   
+<body>
+	<div class="center">
+		This page is a Tableau Web Data Connector for Tableau v10 for <a href=https://hearthstonejson.com>Hearthstone JSON</a> data.
+		<p>
+		Please use Tableau to connect to this URL.
+	</div>
+</body>
+</html>
+\
