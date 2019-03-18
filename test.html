@@ -1,0 +1,164 @@
+Skip to content
+ 
+Search or jump to…
+
+Pull requests
+Issues
+Marketplace
+Explore
+ @jfomby Sign out
+1
+0 1 ausgop/HearthstoneJSON-WDC
+ Code  Issues 0  Pull requests 0  Projects 0  Wiki  Insights
+HearthstoneJSON-WDC/index.html
+@ausgop ausgop Create index.html
+613620e  on Jun 17, 2016
+168 lines (142 sloc)  5.49 KB
+    
+<html>
+<head>
+    <title>Hearthstone JSON WDC</title>
+    
+    <meta http-equiv="Cache-Control" content="no-store" />
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://connectors.tableau.com/libs/tableauwdc-2.0.0-beta.js"></script>
+    <script>
+		(function () {
+		    var myConnector = tableau.makeConnector();
+			myConnector.init = function(initCallback) {
+			    initCallback();
+		        tableau.connectionName = "Hearthstone_JSON";
+			    tableau.submit();
+			};
+			myConnector.getSchema = function (schemaCallback) {
+			    var card_cols = [
+			        { id : "Set", alias : "Set", dataType : tableau.dataTypeEnum.string },
+			        { id : "Type", alias : "Type", dataType : tableau.dataTypeEnum.string },
+			        { id : "Race", alias : "Race", dataType : tableau.dataTypeEnum.string },
+			        { id : "Faction", alias : "Faction", dataType : tableau.dataTypeEnum.string },
+			        { id : "Rarity", alias : "Rarity", dataType : tableau.dataTypeEnum.string },
+			        { id : "Collectible", alias : "Collectible", dataType : tableau.dataTypeEnum.bool },
+			        { id : "Name", alias : "Name", dataType : tableau.dataTypeEnum.string },
+			        { id : "Cost", alias : "Cost", dataType : tableau.dataTypeEnum.float },
+			        { id : "Health", alias : "Health", dataType : tableau.dataTypeEnum.float },
+			        { id : "Attack", alias : "Attack", dataType : tableau.dataTypeEnum.float },
+			        { id : "Durability", alias : "Durability", dataType : tableau.dataTypeEnum.float },
+			        { id : "playerClass", alias : "Class", dataType : tableau.dataTypeEnum.string },
+			        { id : "ID", alias : "ID", dataType : tableau.dataTypeEnum.string }
+			    ];
+				var mechanics_cols = [
+			        { id : "ID", alias : "ID", dataType : tableau.dataTypeEnum.string },
+			        { id : "Mechanic", alias : "Mechanic", dataType : tableau.dataTypeEnum.string }
+				];
+			    var card_table = {
+			        id : "hearthstone_cards",
+			        alias : "Hearthstone Cards",
+			        columns : card_cols
+			    };
+			    var mechanics_table = {
+			        id : "card_mechanics",
+			        alias : "Card Mechanics",
+			        columns : mechanics_cols
+			    };
+			    schemaCallback([card_table, mechanics_table]);
+			};
+			myConnector.getData = function (table, doneCallback) {
+				if (table.tableInfo.id == "hearthstone_cards") {
+					    var card_tableData = [];
+					    $.getJSON("https://api.hearthstonejson.com/v1/latest/enUS/cards.json", function (cards) {
+					        for (var i = 0, len = cards.length; i < len; i++) {
+								set = cards[i].set || 'Unknown',
+								card_type = cards[i].type || 'Unknown',
+								race = cards[i].race || 'Unknown',
+								faction = cards[i].faction || 'Unknown',
+								rarity = cards[i].rarity || 'Unknown',
+								collectible = cards[i].collectible || false,
+								card_name = cards[i].name || 'Unknown',
+								cost = cards[i].cost || 0,
+								health = cards[i].health || 0,
+								attack = cards[i].attack || 0,
+								durability = cards[i].durability || 0,
+								playerClass = cards[i].playerClass || 'Neutral',
+								card_id = cards[i].id || 'Unknown'
+					            card_tableData.push({
+									'Set': set,	
+									'Type': card_type, 
+									'Race': race, 
+									'Faction': faction, 
+									'Rarity': rarity, 
+									'Collectible': collectible, 
+									'Name': card_name, 
+									'Cost': cost, 
+									'Health': health, 
+									'Attack': attack, 
+									'Durability': durability, 
+									'playerClass': playerClass, 
+									'ID': card_id
+					            });
+							}
+					        table.appendRows(card_tableData);
+					        doneCallback();
+					    });
+					} else if (table.tableInfo.id == "card_mechanics") {
+					    var mechanics_tableData = [];
+					    $.getJSON("https://api.hearthstonejson.com/v1/latest/enUS/cards.json", function (cards) {
+					        for (var i = 0, len = cards.length; i < len; i++) {
+								current_card = cards[i]
+								if (typeof current_card.mechanics != 'undefined') {
+									for (var ii = 0, len_m = current_card.mechanics.length; ii < len_m; ii++) {
+										card_id = current_card.id || 'Unknown',
+										mechanic = current_card.mechanics[ii] || 'Unknown'
+										mechanics_tableData.push({
+											'ID': card_id,
+											'Mechanic': mechanic
+										});
+									}
+								}
+							}
+							table.appendRows(mechanics_tableData);
+					        doneCallback();
+					    });
+					}
+				};
+		    tableau.registerConnector(myConnector);
+			$(document).ready(function () {
+			    $("#submitButton").click(function () {
+			        tableau.connectionName = "Hearthstone_JSON";
+			        tableau.submit();
+			    });
+			});
+		})();
+	</script>
+	<style>
+		body {
+		    background-image: url("ipad_wallpaper800x600.jpg");
+			background-repeat: no-repeat;
+			background-position: center top;
+		    background-color: #cccccc;
+		}
+		a {
+		    color: #265380;
+		}
+		.center {
+			color: #21140F;
+			text-align: center;
+			margin: auto;
+			margin-top: 50px;
+			width: 600px;
+			opacity: 0.5;
+		}
+	</style>
+</head>
+   
+<body>
+	<div class="center">
+		This page is a Tableau Web Data Connector for Tableau v10 for <a href=https://hearthstonejson.com>Hearthstone JSON</a> data.
+		<p>
+		Please use Tableau to connect to this URL.
+	</div>
+</body>
+</html>
+\
