@@ -60,7 +60,7 @@
 
     myConnector.getData = function(table, doneCallback) {
         //$.getJSON("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson", function(resp) {
-            $.getJSON("http://admin.stage.clarity.trimble.com/workflows?code=ad7886f7-c3f7-45de-b189-d898f595d0bc&pageSize=5000", function(resp) {
+            $.getJSON("https://admin.stage.clarity.trimble.com/workflows?code=ad7886f7-c3f7-45de-b189-d898f595d0bc&pageSize=5000", function(resp) {
             var feat = resp,
                 tableData = [];
     
@@ -83,8 +83,8 @@
             }
     
             table.appendRows(tableData);
-            doneCallback();
         });
+        doneCallback();
     };
 
     tableau.registerConnector(myConnector);
