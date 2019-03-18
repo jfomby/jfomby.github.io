@@ -83,7 +83,7 @@
             }
     
             table.appendRows(tableData);
-            doneCallback();
+            //doneCallback();
         });
 
     };
