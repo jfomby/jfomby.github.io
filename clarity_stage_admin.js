@@ -66,24 +66,37 @@
     
             // Iterate over the JSON object
             for (var i = 0, len = feat.length; i < len; i++) {
+                id = feat[i].set,
+                createdUtc = feat[i].createdUtc,
+                updatedUtc = feat[i].updatedUtc,
+                datasetId = feat[i].datasetId,
+                fileId = feat[i].fileId,
+                filename = feat[i].filename,
+                size = feat[i].size,
+                user = feat[i].user,
+                lastStateChangeHours = feat[i].lastStateChangeHours,
+                source = feat[i].source,
+                state = feat[i].state,
+                workflowType = feat[i].workflowType
+
                 tableData.push({
-                    "id": feat[i].id,
-                    "createdUtc": feat[i].createdUtc,
-                    "updatedUtc": feat[i].updatedUtc,
-                    "datasetId": feat[i].datasetId,
-                    "fileId": feat[i].fileId,
-                    "filename": feat[i].filename,
-                    "size": feat[i].size,
-                    "user": feat[i].user,
-                    "lastStateChangeHours": feat[i].lastStateChangeHours,
-                    "source": feat[i].source,
-                    "state": feat[i].state,
-                    "workflowType": feat[i].workflowType
+                    "id": id,
+                    "createdUtc": createdUtc,
+                    "updatedUtc": updatedUtc,
+                    "datasetId": datasetId,
+                    "fileId": ileId,
+                    "filename": filename,
+                    "size": size,
+                    "user": user,
+                    "lastStateChangeHours": lastStateChangeHours,
+                    "source": source,
+                    "state": state,
+                    "workflowType": workflowType
                 });
             }
     
             table.appendRows(tableData);
-            //doneCallback();
+            doneCallback();
         });
 
     };
