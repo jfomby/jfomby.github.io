@@ -83,8 +83,9 @@
             }
     
             table.appendRows(tableData);
+            doneCallback();
         });
-        doneCallback();
+
     };
 
     tableau.registerConnector(myConnector);
