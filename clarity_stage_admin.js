@@ -84,7 +84,7 @@
                     "createdUtc": createdUtc,
                     "updatedUtc": updatedUtc,
                     "datasetId": datasetId,
-                    "fileId": ileId,
+                    "fileId": fileId,
                     "filename": filename,
                     "size": size,
                     "user": user,
