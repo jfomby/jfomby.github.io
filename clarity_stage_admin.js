@@ -5,7 +5,7 @@
         var cols = [{
             id: "id",
             alias: "id",
-            dataType: tableau.dataTypeEnum.string
+            dataType: tableau.dataTypeEnum.int
         }, {
             id: "createdUtc",
             alias: "Created UTC",
