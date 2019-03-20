@@ -19,7 +19,7 @@
             alias: "Dataset Id",
             dataType: tableau.dataTypeEnum.string
         }, {
-            id: "fileId",
+            id: "fileId",   
             dataType: tableau.dataTypeEnum.float
         },{
             id: "filename",
@@ -35,7 +35,7 @@
         },{
            id: "lastStateChangeHours",
            alias: "Last State Change Hours",
-           dataType: tableau.dataTypeEnum.int 
+           dataType: tableau.dataTypeEnum.float 
         },{
             id: "source",
             alias: "Source",
