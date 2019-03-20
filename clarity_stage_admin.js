@@ -5,15 +5,15 @@
         var cols = [{
             id: "id",
             alias: "id",
-            dataType: tableau.dataTypeEnum.int
+            dataType: tableau.dataTypeEnum.string
         }, {
             id: "createdUtc",
             alias: "Created UTC",
-            dataType: tableau.dataTypeEnum.date
+            dataType: tableau.dataTypeEnum.datetime
         },{
             id: "updatedUtc",
             alias: "Updated UTC",
-            dataType: tableau.dataTypeEnum.date
+            dataType: tableau.dataTypeEnum.datetime
         },{
             id: "datasetId",
             alias: "Dataset Id",
@@ -52,7 +52,6 @@
     
         var tableSchema = {
             id: "clarityV2",
-            alias: "Processing Analytics",
             columns: cols
         };
     
